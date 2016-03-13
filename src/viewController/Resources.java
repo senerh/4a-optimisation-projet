@@ -4,7 +4,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 
-public class Ressources {
+public class Resources {
     
     public static final Image AGENCY;
     static {
