@@ -8,8 +8,17 @@ public class Ressources {
     
     public static final Image AGENCY;
     static {
-        ImageIcon m = new ImageIcon("images/agency.png");
-        AGENCY = m.getImage();
+        AGENCY = loadImage("images/agency.png");
+    }
+    
+    public static final Image PLACE;
+    static {
+        PLACE = loadImage("images/place.png");
+    }
+    
+    private static Image loadImage(String path) {
+        ImageIcon m = new ImageIcon(ClassLoader.getSystemResource(path));
+        return m.getImage();
     }
 
 }

@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 
 import model.Agency;
 import model.Map;
+import model.Place;
 
 public class MapView extends JPanel implements Observer {
 
@@ -31,25 +32,42 @@ public class MapView extends JPanel implements Observer {
         map.addObserver(this);
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
-        
     }
 
     public void paint(Graphics g) {
         super.paint(g);
+        
+        drawPlaces(g);
 
         drawAgencies(g);
     }
 
     private void drawAgencies(Graphics g) {
         for (Agency agency : map.getListAgencies()) {
-            int x = (int) (((EAST-agency.getLongitude())/LNG_DIFF)*MAP_WIDTH);
-            int y = (int) (((NORTH-agency.getLatitude())/LAT_DIFF)*MAP_HEIGHT);
+            int x = longitudeToX(agency.getLongitude());
+            int y = latitudeToY(agency.getLatitude());
             g.drawImage(Ressources.AGENCY, x, y,this);
+        }
+    }
+    
+    private void drawPlaces(Graphics g) {
+        for (Place place : map.getListPlaces()) {
+            int x = longitudeToX(place.getLongitude());
+            int y = latitudeToY(place.getLatitude());
+            g.drawImage(Ressources.PLACE, x, y,this);
         }
     }
 
     public void update(Observable arg0, Object arg1) {
         repaint();
+    }
+    
+    private int longitudeToX(float longitude) {
+        return (int) (((EAST-longitude)/LNG_DIFF)*MAP_WIDTH);
+    }
+    
+    private int latitudeToY(float latitude) {
+        return (int) (((NORTH-latitude)/LAT_DIFF)*MAP_HEIGHT);
     }
 
 }
