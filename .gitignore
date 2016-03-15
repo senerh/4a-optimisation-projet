@@ -20,6 +20,9 @@ bin/
 # Mac system files
 .DS_Store
 
+# Intellij project files
 *.iml
 .idea/
 out/
+
+resources/images/france_map.pfi

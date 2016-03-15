@@ -52,7 +52,7 @@ public class MapView extends JPanel implements Observer {
         for (Agency agency : map.getListAgencies()) {
             int x = longitudeToX(agency.getLongitude());
             int y = latitudeToY(agency.getLatitude());
-            g.drawImage(Resources.AGENCY, MAP_WIDTH-x, y,this);
+            g.drawImage(Resources.AGENCY, x, y,this);
         }
     }
     
@@ -60,7 +60,7 @@ public class MapView extends JPanel implements Observer {
         for (Place place : map.getListPlaces()) {
             int x = longitudeToX(place.getLongitude());
             int y = latitudeToY(place.getLatitude());
-            g.drawImage(Resources.PLACE, MAP_WIDTH-x, y,this);
+            g.drawImage(Resources.PLACE, x, y,this);
         }
     }
 
@@ -69,7 +69,7 @@ public class MapView extends JPanel implements Observer {
     }
     
     private int longitudeToX(float longitude) {
-        return (int) (((EAST-longitude)/LNG_DIFF)*MAP_WIDTH);
+        return MAP_WIDTH - (int) (((EAST-longitude)/LNG_DIFF)*MAP_WIDTH);
     }
     
     private int latitudeToY(float latitude) {
