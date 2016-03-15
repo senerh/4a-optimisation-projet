@@ -36,17 +36,23 @@ public class MapView extends JPanel implements Observer {
 
     public void paint(Graphics g) {
         super.paint(g);
-        
+
+        drawFranceMap(g);
+
         drawPlaces(g);
 
         drawAgencies(g);
+    }
+
+    private void drawFranceMap(Graphics g) {
+        g.drawImage(Resources.FRANCE_MAP, 0, 0,this);
     }
 
     private void drawAgencies(Graphics g) {
         for (Agency agency : map.getListAgencies()) {
             int x = longitudeToX(agency.getLongitude());
             int y = latitudeToY(agency.getLatitude());
-            g.drawImage(Resources.AGENCY, x, y,this);
+            g.drawImage(Resources.AGENCY, MAP_WIDTH-x, y,this);
         }
     }
     
@@ -54,7 +60,7 @@ public class MapView extends JPanel implements Observer {
         for (Place place : map.getListPlaces()) {
             int x = longitudeToX(place.getLongitude());
             int y = latitudeToY(place.getLatitude());
-            g.drawImage(Resources.PLACE, x, y,this);
+            g.drawImage(Resources.PLACE, MAP_WIDTH-x, y,this);
         }
     }
 
