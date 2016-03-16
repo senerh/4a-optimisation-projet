@@ -21,9 +21,12 @@ import javax.swing.JPanel;
 
 import model.Model;
 
-public class Window extends JFrame implements Observer
-{
+public class Window extends JFrame implements Observer {
+
     private static final long serialVersionUID = -5494106475468177190L;
+    public static final int WIDTH = 800;
+    public static final int HEIGHT = 700;
+    
     private Model model;
 
     public Window(Model model) {
@@ -44,21 +47,26 @@ public class Window extends JFrame implements Observer
     }
 
     public void build() {
-        buildMenu();
-
         setTitle("Projet - Lieux de formation");
-        setSize(700, 700);
+        setSize(WIDTH, HEIGHT);
         
-        setLayout(new BorderLayout());
+        buildMenu();
         
-        MapView mapView = new MapView(model.getMap());
-        mapView.setPreferredSize(new Dimension(500, 500));
-        add(mapView, BorderLayout.LINE_START);
-        JPanel panel = new JPanel();
-        panel.setPreferredSize(new Dimension(100, 150));
-        add(panel, BorderLayout.PAGE_END);
+        buildMap();
         
         setResizable(false);
+    }
+    
+    private void buildMap() {
+        MapView mapView = new MapView(model.getMap());
+        MapLegend mapLegend = new MapLegend();
+        
+        JPanel mapContainer = new JPanel(new BorderLayout(0, 0));
+        mapContainer.setPreferredSize(new Dimension(MapView.HEIGHT, MapView.WIDTH));
+        
+        mapContainer.add(mapView, BorderLayout.PAGE_START);
+        mapContainer.add(mapLegend, BorderLayout.PAGE_END);
+        add(mapContainer, BorderLayout.LINE_START);
     }
     
     private void buildMenu() {

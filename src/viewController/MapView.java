@@ -1,11 +1,11 @@
 package viewController;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.util.Observable;
 import java.util.Observer;
 
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 
 import model.Agency;
@@ -21,8 +21,8 @@ public class MapView extends JPanel implements Observer {
     private static final float EAST = (float) 7.95;
     private static final float LAT_DIFF = NORTH - SOUTH;
     private static final float LNG_DIFF = EAST - WEST;
-    private static final int MAP_WIDTH = 500;
-    private static final int MAP_HEIGHT = 500;
+    public static final int WIDTH = 500;
+    public static final int HEIGHT = 500;
 
     private Map map;
 
@@ -30,8 +30,8 @@ public class MapView extends JPanel implements Observer {
         super();
         this.map = map;
         map.addObserver(this);
+        setPreferredSize(new Dimension(MapView.WIDTH, MapView.HEIGHT));
         setBackground(Color.WHITE);
-        setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
     }
 
     public void paint(Graphics g) {
@@ -69,11 +69,11 @@ public class MapView extends JPanel implements Observer {
     }
     
     private int longitudeToX(float longitude) {
-        return MAP_WIDTH - (int) (((EAST-longitude)/LNG_DIFF)*MAP_WIDTH);
+        return WIDTH - (int) (((EAST-longitude)/LNG_DIFF)*WIDTH);
     }
     
     private int latitudeToY(float latitude) {
-        return (int) (((NORTH-latitude)/LAT_DIFF)*MAP_HEIGHT);
+        return (int) (((NORTH-latitude)/LAT_DIFF)*HEIGHT);
     }
 
 }
