@@ -1,8 +1,7 @@
 package model;
 
 public class Agency {
-//HELLO GAME
-    //BORDELs
+
     private String id;
     private String name;
     private String postalCode;
