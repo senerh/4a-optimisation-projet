@@ -1,6 +1,7 @@
 package viewController;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -63,6 +65,7 @@ public class Window extends JFrame implements Observer {
         
         JPanel mapContainer = new JPanel(new BorderLayout(0, 0));
         mapContainer.setPreferredSize(new Dimension(MapView.HEIGHT, MapView.WIDTH));
+        mapContainer.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK));
         
         mapContainer.add(mapView, BorderLayout.PAGE_START);
         mapContainer.add(mapLegend, BorderLayout.PAGE_END);

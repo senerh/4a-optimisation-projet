@@ -31,7 +31,6 @@ public class MapView extends JPanel implements Observer {
         this.map = map;
         map.addObserver(this);
         setPreferredSize(new Dimension(MapView.WIDTH, MapView.HEIGHT));
-        setBackground(Color.WHITE);
     }
 
     public void paint(Graphics g) {
