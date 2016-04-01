@@ -13,10 +13,12 @@ public class Map extends Observable {
     
     private List<Agency> listAgencies;
     private List<Place> listPlaces;
+    private List<Place> listCenters;
 
     public Map() {
         listAgencies = new ArrayList<Agency>();
         listPlaces = new ArrayList<Place>();
+        listCenters = new ArrayList<Place>();
     }
     
     public void loadAgencies(String fileName) throws IOException {
@@ -95,6 +97,14 @@ public class Map extends Observable {
 
     public List<Place> getListPlaces() {
         return listPlaces;
+    }
+    
+    public List<Place> getListCenters() {
+        return listCenters;
+    }
+    
+    public void setListCenters(List<Place> listCenters) {
+        this.listCenters = listCenters;
     }
 
 }
