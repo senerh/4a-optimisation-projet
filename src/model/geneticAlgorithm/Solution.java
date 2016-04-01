@@ -1,6 +1,7 @@
 package model.geneticAlgorithm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -10,24 +11,26 @@ import model.Model;
 import model.Place;
 
 public class Solution {
-
     private Map map;
-
     private List<Boolean> listPlaces;
-    //TODO: hashmap<centres, listPlaces>
-    private List<Place> listCenters;
-
+    private java.util.Map<Place, List<Agency>> solution;
     private Random random;
 
     public Solution(Map map, List<Boolean> listPlaces) {
         this.map = map;
         this.listPlaces = listPlaces;
         random = new Random();
+        solution = new HashMap<Place, List<Agency>>();
     }
 
     public Solution(Map map) {
         this.map = map;
         random = new Random();
+        solution = new HashMap<Place, List<Agency>>();
+        generateRandomSolution();
+    }
+    
+    private void generateRandomSolution() {
         int nbPlaces = map.getListPlaces().size();
         int nbPersons = 0;
         for (Agency agency : map.getListAgencies()) {
@@ -46,31 +49,34 @@ public class Solution {
         }
 
         while (nbCenters * Model.NB_PERSONS_BY_CENTER < nbPersons) {
-            int r = random.nextInt(nbPlaces);
-            if (!listPlaces.get(r)) {
-                listPlaces.set(r, true);
+            int index = random.nextInt(nbPlaces);
+            if (!listPlaces.get(index)) {
+                listPlaces.set(index, true);
                 nbCenters++;
             }
         }
+        
+        associateAgencies();
     }
 
     private void associateAgencies() {
+        solution.clear();
         List<Agency> listAgencies = new ArrayList<Agency>(map.getListAgencies());
         while (!listAgencies.isEmpty()) {
-            int r = random.nextInt(listAgencies.size());
-            //TODO: affecter au centre le plus proche
-            listAgencies.remove(r);
+            int index = random.nextInt(listAgencies.size());
+            associateNearestCenter(listAgencies.get(index));
+            listAgencies.remove(index);
         }
+        removeUselessCenters();
     }
 
     private void associateNearestCenter(Agency agency) {
-        Place nearestCenter;
+        Place nearestCenter = null;
         float nearestDistance = Float.MAX_VALUE;
         int index = 0;
         for (Boolean isCenter : listPlaces) {
-            if (isCenter) {
-                Place center = map.getListPlaces().get(index);
-                
+            Place center = map.getListPlaces().get(index);
+            if (isCenter && isAvailable(center, agency)) {
                 float distance = distFrom(agency.getLatitude(), agency.getLongitude(), center.getLatitude(), center.getLongitude());
                 if (distance < nearestDistance) {
                     nearestDistance = distance;
@@ -79,10 +85,40 @@ public class Solution {
             }
             index++;
         }
+        //TODO: vérifier si nearestCenter=null ??? Cela voudrait dire qu'il n'y a pas assez de centres pour accueillir toutes les agences
+        if (solution.containsKey(nearestCenter)) {
+            solution.get(nearestCenter).add(agency);
+        } else {
+            List<Agency> l = new ArrayList<Agency>();
+            l.add(agency);
+            solution.put(nearestCenter, l);
+        }
+    }
+    
+    private void removeUselessCenters() {
+        int index = 0;
+        for (Boolean isCenter : listPlaces) {
+            if (isCenter && !solution.containsKey(map.getListPlaces().get(index))) {
+                listPlaces.set(index, false);
+            }
+            index++;
+        }
+    }
+    
+    private boolean isAvailable(Place center, Agency agency) {
+        if (solution.containsKey(center)) {
+            List<Agency> l = solution.get(center);
+            int nbPersons = 0;
+            for (Agency a : l) {
+                nbPersons += a.getNbPersons();
+            }
+            return agency.getNbPersons() + nbPersons <= Model.NB_PERSONS_BY_CENTER;
+        }
+        return true;
     }
 
     private float distFrom(float lat1, float lng1, float lat2, float lng2) {
-        double earthRadius = 6371000;
+        double earthRadius = 6371;
         double dLat = Math.toRadians(lat2-lat1);
         double dLng = Math.toRadians(lng2-lng1);
         double a = Math.sin(dLat/2) * Math.sin(dLat/2) +
@@ -92,6 +128,21 @@ public class Solution {
         float dist = (float) (earthRadius * c);
 
         return dist;
+    }
+    
+    public java.util.Map<Place, List<Agency>> getSolution() {
+        return solution;
+    }
+    
+    public float fitness() {
+        float cost = 0;
+        for (Place center : solution.keySet()) {
+            cost += Model.CENTER_COST;
+            for (Agency agency : solution.get(center)) {
+                cost += Model.KM_COST * distFrom(center.getLatitude(), center.getLongitude(), agency.getLatitude(), agency.getLongitude());
+            }
+        }
+        return cost;
     }
 
 }

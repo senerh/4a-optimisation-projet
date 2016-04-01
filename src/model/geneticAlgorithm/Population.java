@@ -10,7 +10,6 @@ public class Population {
     private List<Solution> listSolutions;
     
     public Population(int size, Map map) {
-        
         listSolutions = new ArrayList<Solution>();
         
         for (int i=0; i<size; i++) {

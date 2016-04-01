@@ -7,8 +7,7 @@ public class Place {
     private String postalCode;
     private float longitude;
     private float latitude;
-    private int busyPlaces;
-
+    
     public Place(
             String id,
             String name,
@@ -99,20 +98,9 @@ public class Place {
         return true;
     }
     
-    public int getBusyPlaces() {
-        return busyPlaces;
-    }
-    
-    public void setBusyPlaces(int nbPlaces) {
-        busyPlaces = nbPlaces;
-    }
-    
-    public void addBusyPlaces(int nbPlaces) {
-        busyPlaces += nbPlaces;
-    }
-    
-    public boolean isBusy(int nbPlaces) {
-        return Model.NB_PERSONS_BY_CENTER < busyPlaces + nbPlaces;
+    @Override
+    public String toString() {
+        return "[Centre (" + id + ")]";
     }
 
 }

@@ -29,5 +29,4 @@ public class Model extends Observable {
     public Map getMap() {
         return map;
     }
-
 }
