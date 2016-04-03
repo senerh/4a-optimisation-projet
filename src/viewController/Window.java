@@ -56,11 +56,20 @@ public class Window extends JFrame implements Observer {
         
         buildMap();
         
+        buildForm();
+        
+        setLocationRelativeTo(null);
+        
         setResizable(false);
     }
     
+    private void buildForm() {
+        Form form = new Form(model.getGeneticAlgorithm());
+        add(form);
+    }
+    
     private void buildMap() {
-        MapView mapView = new MapView(model.getMap());
+        MapView mapView = new MapView(model.getMap(), model.getGeneticAlgorithm());
         MapLegend mapLegend = new MapLegend();
         
         JPanel mapContainer = new JPanel(new BorderLayout(0, 0));

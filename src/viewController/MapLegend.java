@@ -1,13 +1,9 @@
 package viewController;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
-import javafx.scene.layout.Border;
-
-import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -42,7 +38,11 @@ public class MapLegend extends JPanel {
         grid.add(lbl);
         
         img = new ImageIcon(Resources.PLACE);
-        lbl = new JLabel("Places", img, JLabel.LEFT);
+        lbl = new JLabel("Villes", img, JLabel.LEFT);
+        grid.add(lbl);
+        
+        img = new ImageIcon(Resources.CENTER);
+        lbl = new JLabel("Centres", img, JLabel.LEFT);
         grid.add(lbl);
         
         setLayout(new BorderLayout());

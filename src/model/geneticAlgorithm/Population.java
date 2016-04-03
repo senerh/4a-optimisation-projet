@@ -16,4 +16,14 @@ public class Population {
             listSolutions.add(new Solution(map));
         }
     }
+
+    public Solution getBestSolution() {
+        Solution bestSolution = listSolutions.get(0);
+        for (Solution solution : listSolutions) {
+            if (solution.getFitness() < bestSolution.getFitness()) {
+                bestSolution = solution;
+            }
+        }
+        return bestSolution;
+    }
 }

@@ -3,6 +3,8 @@ package model;
 import java.io.IOException;
 import java.util.Observable;
 
+import model.geneticAlgorithm.GeneticAlgorithm;
+
 public class Model extends Observable {
     
     public static final int NB_PERSONS_BY_CENTER = 60;
@@ -17,6 +19,8 @@ public class Model extends Observable {
 
     private Map map;
     
+    private GeneticAlgorithm geneticAlgorithm;
+    
     public Model() {
         map = new Map();
         try {
@@ -24,9 +28,15 @@ public class Model extends Observable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        geneticAlgorithm = new GeneticAlgorithm(map);
     }
     
     public Map getMap() {
         return map;
     }
+
+    public GeneticAlgorithm getGeneticAlgorithm() {
+        return geneticAlgorithm;
+    }
+    
 }

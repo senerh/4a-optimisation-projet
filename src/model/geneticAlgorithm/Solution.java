@@ -15,13 +15,7 @@ public class Solution {
     private List<Boolean> listPlaces;
     private java.util.Map<Place, List<Agency>> solution;
     private Random random;
-
-    public Solution(Map map, List<Boolean> listPlaces) {
-        this.map = map;
-        this.listPlaces = listPlaces;
-        random = new Random();
-        solution = new HashMap<Place, List<Agency>>();
-    }
+    private float fitness;
 
     public Solution(Map map) {
         this.map = map;
@@ -57,6 +51,7 @@ public class Solution {
         }
         
         associateAgencies();
+        calculateFitness();
     }
 
     private void associateAgencies() {
@@ -134,7 +129,7 @@ public class Solution {
         return solution;
     }
     
-    public float fitness() {
+    private void calculateFitness() {
         float cost = 0;
         for (Place center : solution.keySet()) {
             cost += Model.CENTER_COST;
@@ -142,7 +137,11 @@ public class Solution {
                 cost += Model.KM_COST * distFrom(center.getLatitude(), center.getLongitude(), agency.getLatitude(), agency.getLongitude());
             }
         }
-        return cost;
+        fitness = cost;
+    }
+    
+    public float getFitness() {
+        return fitness;
     }
 
 }

@@ -21,6 +21,11 @@ public class Resources {
         FRANCE_MAP = loadImage("images/france_map.png");
     }
     
+    public static final Image CENTER;
+    static {
+        CENTER = loadImage("images/center.png");
+    }
+    
     private static Image loadImage(String path) {
         ImageIcon m = new ImageIcon(ClassLoader.getSystemResource(path));
         return m.getImage();

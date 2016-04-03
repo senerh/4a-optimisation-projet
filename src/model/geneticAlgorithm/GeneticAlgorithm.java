@@ -1,19 +1,33 @@
 package model.geneticAlgorithm;
 
-import java.util.List;
+import java.util.Observable;
 
-import model.Agency;
 import model.Map;
 
-public class GeneticAlgorithm {
+public class GeneticAlgorithm extends Observable {
     
     private Map map;
-    
-    private List<Agency> listAgencies;
+    private Population population;
+    private Solution bestSolution;
     
     public GeneticAlgorithm(Map map) {
         this.map = map;
-        listAgencies = map.getListAgencies();
+    }
+    
+    public void start() {
+        population = new Population(10, map);
+        bestSolution = population.getBestSolution();
+        
+        setChanged();
+        notifyObservers();
+    }
+    
+    public Solution getBestSolution() {
+        return bestSolution;
+    }
+    
+    public boolean isStarted() {
+        return population != null;
     }
 
 }

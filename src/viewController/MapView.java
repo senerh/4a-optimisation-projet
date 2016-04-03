@@ -3,6 +3,8 @@ package viewController;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -11,6 +13,7 @@ import javax.swing.JPanel;
 import model.Agency;
 import model.Map;
 import model.Place;
+import model.geneticAlgorithm.GeneticAlgorithm;
 
 public class MapView extends JPanel implements Observer {
 
@@ -25,11 +28,14 @@ public class MapView extends JPanel implements Observer {
     public static final int HEIGHT = 500;
 
     private Map map;
+    private GeneticAlgorithm geneticAlgorithm;
 
-    public MapView(Map map) {
+    public MapView(Map map, GeneticAlgorithm geneticAlgorithm) {
         super();
         this.map = map;
+        this.geneticAlgorithm = geneticAlgorithm;
         map.addObserver(this);
+        geneticAlgorithm.addObserver(this);
         setPreferredSize(new Dimension(MapView.WIDTH, MapView.HEIGHT));
     }
 
@@ -37,10 +43,13 @@ public class MapView extends JPanel implements Observer {
         super.paint(g);
 
         drawFranceMap(g);
-
-        drawPlaces(g);
-
-        drawAgencies(g);
+        
+        if (geneticAlgorithm.isStarted()) {
+            drawSolution(g);
+        } else {
+            drawPlaces(g);
+            drawAgencies(g);
+        }
     }
 
     private void drawFranceMap(Graphics g) {
@@ -60,6 +69,22 @@ public class MapView extends JPanel implements Observer {
             int x = longitudeToX(place.getLongitude());
             int y = latitudeToY(place.getLatitude());
             g.drawImage(Resources.PLACE, x, y,this);
+        }
+    }
+    
+    private void drawSolution(Graphics g) {
+        g.setColor(Color.GREEN);
+        java.util.Map<Place, List<Agency>> solution = geneticAlgorithm.getBestSolution().getSolution();
+        for (Entry<Place, List<Agency>> entry : solution.entrySet()) {
+            int center_x = longitudeToX(entry.getKey().getLongitude());
+            int center_y = latitudeToY(entry.getKey().getLatitude());
+            for (Agency agency : entry.getValue()) {
+                int agency_x = longitudeToX(agency.getLongitude());
+                int agency_y = latitudeToY(agency.getLatitude());
+                g.drawImage(Resources.AGENCY, agency_x, agency_y, this);
+                g.drawImage(Resources.CENTER, agency_x, agency_y, this);
+                g.drawLine(center_x, center_y, agency_x, agency_y);
+            }
         }
     }
 
