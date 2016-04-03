@@ -45,6 +45,7 @@ public class MapView extends JPanel implements Observer {
         drawFranceMap(g);
         
         if (geneticAlgorithm.isStarted()) {
+            drawPlaces(g);
             drawSolution(g);
         } else {
             drawPlaces(g);
@@ -82,7 +83,7 @@ public class MapView extends JPanel implements Observer {
                 int agency_x = longitudeToX(agency.getLongitude());
                 int agency_y = latitudeToY(agency.getLatitude());
                 g.drawImage(Resources.AGENCY, agency_x, agency_y, this);
-                g.drawImage(Resources.CENTER, agency_x, agency_y, this);
+                g.drawImage(Resources.CENTER, center_x, center_y, this);
                 g.drawLine(center_x, center_y, agency_x, agency_y);
             }
         }

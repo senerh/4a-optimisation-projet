@@ -42,7 +42,7 @@ public class MapLegend extends JPanel {
         grid.add(lbl);
         
         img = new ImageIcon(Resources.CENTER);
-        lbl = new JLabel("Centres", img, JLabel.LEFT);
+        lbl = new JLabel("Centres de formation", img, JLabel.LEFT);
         grid.add(lbl);
         
         setLayout(new BorderLayout());

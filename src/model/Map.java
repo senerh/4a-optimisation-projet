@@ -13,10 +13,12 @@ public class Map extends Observable {
     
     private List<Agency> listAgencies;
     private List<Place> listPlaces;
+    private int nbPersons;
 
     public Map() {
         listAgencies = new ArrayList<Agency>();
         listPlaces = new ArrayList<Place>();
+        nbPersons = 0;
     }
     
     public void loadAgencies(String fileName) throws IOException {
@@ -28,9 +30,11 @@ public class Map extends Observable {
         line = file.readLine();
         
         List<Agency> listAgencies = new ArrayList<Agency>();
-        
+        nbPersons = 0;
         while ((line = file.readLine()) != null) {
-            listAgencies.add(lineToAgency(line));
+            Agency agency = lineToAgency(line);
+            listAgencies.add(agency);
+            nbPersons += agency.getNbPersons();
         }
         
         this.listAgencies = listAgencies;
@@ -95,6 +99,10 @@ public class Map extends Observable {
 
     public List<Place> getListPlaces() {
         return listPlaces;
+    }
+    
+    public int getNbPersons() {
+        return nbPersons;
     }
 
 }

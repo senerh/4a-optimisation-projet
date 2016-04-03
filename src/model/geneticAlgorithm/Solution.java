@@ -3,6 +3,7 @@ package model.geneticAlgorithm;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import model.Agency;
@@ -26,10 +27,7 @@ public class Solution {
     
     private void generateRandomSolution() {
         int nbPlaces = map.getListPlaces().size();
-        int nbPersons = 0;
-        for (Agency agency : map.getListAgencies()) {
-            nbPersons += agency.getNbPersons();
-        }
+        int nbPersons = map.getNbPersons();
 
         listPlaces = new ArrayList<Boolean>();
         int nbCenters = 0;
@@ -51,7 +49,6 @@ public class Solution {
         }
         
         associateAgencies();
-        calculateFitness();
     }
 
     private void associateAgencies() {
@@ -63,6 +60,7 @@ public class Solution {
             listAgencies.remove(index);
         }
         removeUselessCenters();
+        calculateFitness();
     }
 
     private void associateNearestCenter(Agency agency) {
@@ -131,10 +129,10 @@ public class Solution {
     
     private void calculateFitness() {
         float cost = 0;
-        for (Place center : solution.keySet()) {
+        for (Entry<Place, List<Agency>> entry : solution.entrySet()) {
             cost += Model.CENTER_COST;
-            for (Agency agency : solution.get(center)) {
-                cost += Model.KM_COST * distFrom(center.getLatitude(), center.getLongitude(), agency.getLatitude(), agency.getLongitude());
+            for (Agency agency : entry.getValue()) {
+                cost += Model.KM_COST * distFrom(entry.getKey().getLatitude(), entry.getKey().getLongitude(), agency.getLatitude(), agency.getLongitude());
             }
         }
         fitness = cost;

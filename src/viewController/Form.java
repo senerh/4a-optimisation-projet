@@ -4,8 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -17,7 +15,7 @@ import javax.swing.JTextField;
 
 import model.geneticAlgorithm.GeneticAlgorithm;
 
-public class Form extends JPanel implements Observer {
+public class Form extends JPanel {
 
     private static final long serialVersionUID = -1052244012517863332L;
 
@@ -33,7 +31,6 @@ public class Form extends JPanel implements Observer {
 
     public Form(GeneticAlgorithm geneticAlgorithm) {
         this.geneticAlgorithm = geneticAlgorithm;
-        geneticAlgorithm.addObserver(this);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         build();
     }
@@ -64,10 +61,6 @@ public class Form extends JPanel implements Observer {
             }
         });
         add(jButton, BorderLayout.PAGE_END);
-    }
-
-    public void update(Observable arg0, Object arg1) {
-        System.out.println(geneticAlgorithm.getBestSolution().getFitness());
     }
 
 }

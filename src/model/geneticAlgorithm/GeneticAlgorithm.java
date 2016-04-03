@@ -29,5 +29,9 @@ public class GeneticAlgorithm extends Observable {
     public boolean isStarted() {
         return population != null;
     }
+    
+    public int getNbPersons() {
+        return map.getNbPersons();
+    }
 
 }

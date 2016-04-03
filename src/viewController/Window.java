@@ -3,6 +3,7 @@ package viewController;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -64,8 +65,12 @@ public class Window extends JFrame implements Observer {
     }
     
     private void buildForm() {
+        JPanel container = new JPanel(new GridLayout(2, 1));
         Form form = new Form(model.getGeneticAlgorithm());
-        add(form);
+        Informations informations = new Informations(model.getGeneticAlgorithm());
+        container.add(form);
+        container.add(informations);
+        add(container);
     }
     
     private void buildMap() {
