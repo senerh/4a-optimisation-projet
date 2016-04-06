@@ -15,7 +15,7 @@ public class Model extends Observable {
     
     public static final int CENTER_COST = TRAINER_COST + RENTING_COST;
     
-    public static final double KM_COST = 0.4;
+    public static final float KM_COST = (float) 0.4;
 
     private Map map;
     

@@ -9,12 +9,15 @@ public class GeneticAlgorithm extends Observable {
     private Map map;
     private Population population;
     private Solution bestSolution;
+    private boolean isStarted;
     
     public GeneticAlgorithm(Map map) {
         this.map = map;
+        isStarted = false;
     }
     
     public void start() {
+        isStarted = true;
         population = new Population(10, map);
         bestSolution = population.getBestSolution();
         
@@ -26,8 +29,12 @@ public class GeneticAlgorithm extends Observable {
         return bestSolution;
     }
     
-    public boolean isStarted() {
-        return population != null;
+    public boolean getIsStarted() {
+        return isStarted;
+    }
+    
+    public void setIsStarted(boolean isStarted) {
+        this.isStarted = isStarted;
     }
     
     public int getNbPersons() {

@@ -44,7 +44,7 @@ public class MapView extends JPanel implements Observer {
 
         drawFranceMap(g);
         
-        if (geneticAlgorithm.isStarted()) {
+        if (geneticAlgorithm.getIsStarted()) {
             drawPlaces(g);
             drawSolution(g);
         } else {

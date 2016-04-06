@@ -17,6 +17,7 @@ public class Solution {
     private java.util.Map<Place, List<Agency>> solution;
     private Random random;
     private float fitness;
+    private float totalDistance;
 
     public Solution(Map map) {
         this.map = map;
@@ -128,18 +129,21 @@ public class Solution {
     }
     
     private void calculateFitness() {
-        float cost = 0;
+        totalDistance = 0;
         for (Entry<Place, List<Agency>> entry : solution.entrySet()) {
-            cost += Model.CENTER_COST;
             for (Agency agency : entry.getValue()) {
-                cost += Model.KM_COST * distFrom(entry.getKey().getLatitude(), entry.getKey().getLongitude(), agency.getLatitude(), agency.getLongitude());
+                totalDistance += 2 * agency.getNbPersons() * distFrom(entry.getKey().getLatitude(), entry.getKey().getLongitude(), agency.getLatitude(), agency.getLongitude());
             }
         }
-        fitness = cost;
+        fitness = Model.KM_COST * totalDistance + solution.size() * Model.CENTER_COST;;
     }
     
     public float getFitness() {
         return fitness;
+    }
+    
+    public float getTotalDistance() {
+        return totalDistance;
     }
 
 }

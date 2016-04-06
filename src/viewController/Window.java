@@ -107,6 +107,7 @@ public class Window extends JFrame implements Observer {
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     File file = fc.getSelectedFile();
                     try {
+                        model.getGeneticAlgorithm().setIsStarted(false);
                         model.getMap().loadAgencies(file.getAbsolutePath());
                     } catch (IOException e) {
                         JOptionPane.showMessageDialog(Window.this,

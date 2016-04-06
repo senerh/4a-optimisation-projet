@@ -20,6 +20,7 @@ public class Informations extends JPanel implements Observer {
     private JLabel nbSeatsLabel;
     private JLabel nbUsedSeatsLabel;
     private JLabel nbUnusedSeatsLabel;
+    private JLabel totalDistanceLabel;
     
     private String titleString = "<html><h3>Informations sur la solution</h3></html>";
     private String fitnessString = "Cout : ";
@@ -27,6 +28,7 @@ public class Informations extends JPanel implements Observer {
     private String nbSeatsString = "Nombre de places : ";
     private String nbUsedSeatsString = "Nombre de places utilisées : ";
     private String nbUnusedSeatsString = "Nombre de places inutilisées : ";
+    private String totalDistanceString = "Distance totale parcourue : ";
 
     private GeneticAlgorithm geneticAlgorithm;
     
@@ -37,13 +39,14 @@ public class Informations extends JPanel implements Observer {
     }
     
     private void build() {
-        JPanel component = new JPanel(new GridLayout(6, 1));
+        JPanel component = new JPanel(new GridLayout(0, 1));
         titleLabel = new JLabel(titleString);
         fitnessLabel = new JLabel(fitnessString);
         nbCentersLabel = new JLabel(nbCentersString);
         nbSeatsLabel = new JLabel(nbSeatsString);
         nbUsedSeatsLabel = new JLabel(nbUsedSeatsString);
         nbUnusedSeatsLabel = new JLabel(nbUnusedSeatsString);
+        totalDistanceLabel = new JLabel(totalDistanceString);
         
         component.add(titleLabel);
         component.add(fitnessLabel);
@@ -51,6 +54,7 @@ public class Informations extends JPanel implements Observer {
         component.add(nbSeatsLabel);
         component.add(nbUsedSeatsLabel);
         component.add(nbUnusedSeatsLabel);
+        component.add(totalDistanceLabel);
         
         add(component);
     }
@@ -62,6 +66,7 @@ public class Informations extends JPanel implements Observer {
         nbUsedSeatsLabel.setText(nbUsedSeatsString + geneticAlgorithm.getNbPersons());
         int n = geneticAlgorithm.getBestSolution().getSolution().size() * Model.NB_PERSONS_BY_CENTER - geneticAlgorithm.getNbPersons();
         nbUnusedSeatsLabel.setText(nbUnusedSeatsString + n);
+        totalDistanceLabel.setText(totalDistanceString + geneticAlgorithm.getBestSolution().getTotalDistance() + " km");
     }
 
 }
