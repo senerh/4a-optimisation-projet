@@ -65,7 +65,7 @@ public class Window extends JFrame implements Observer {
     }
     
     private void buildForm() {
-        JPanel container = new JPanel(new GridLayout(2, 1));
+        JPanel container = new JPanel(new GridLayout(0, 1));
         Form form = new Form(model.getGeneticAlgorithm());
         Informations informations = new Informations(model.getGeneticAlgorithm());
         container.add(form);

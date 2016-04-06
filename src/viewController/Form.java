@@ -1,13 +1,11 @@
 package viewController;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,48 +17,64 @@ public class Form extends JPanel {
 
     private static final long serialVersionUID = -1052244012517863332L;
 
-    private static final String POPULATION_SIZE = "Taille de la population";
-
     private static ExecutorService executor = Executors.newFixedThreadPool(1);
 
+    private String startString = "Démarrer";
+    private String titleString = "<html><h3>Algorithme génétique</h3></html>";
+    private String populationSizeString = "Taille de la population : ";
+    private String mutationRateString = "Taux de mutation : ";
+
+    private JLabel titleLabel;
     private JLabel populationSizeLabel;
+    private JLabel mutationRateLabel;
 
     private JTextField populationSizeField;
+    private JTextField mutationRateField;
+
+    private JButton startButton;
 
     private GeneticAlgorithm geneticAlgorithm;
 
     public Form(GeneticAlgorithm geneticAlgorithm) {
         this.geneticAlgorithm = geneticAlgorithm;
-        setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         build();
     }
 
     private void build() {
-        populationSizeLabel = new JLabel(POPULATION_SIZE);
+        titleLabel = new JLabel(titleString);
+        populationSizeLabel = new JLabel(populationSizeString);
+        mutationRateLabel = new JLabel(mutationRateString);
+
         populationSizeField = new JTextField(5);
+        mutationRateField = new JTextField(5);
 
-        JPanel labelPane = new JPanel(new GridLayout(0,1));
-        labelPane.add(populationSizeLabel);
+        startButton = new JButton(startString);
+        startButton.addActionListener(new Controller());
 
-        JPanel fieldPane = new JPanel(new GridLayout(0,1));
-        fieldPane.add(populationSizeField);
+        JPanel labelsContainer = new JPanel(new GridLayout(0, 1, 0, 10));
+        labelsContainer.add(populationSizeLabel);
+        labelsContainer.add(mutationRateLabel);
 
-        add(labelPane, BorderLayout.LINE_START);
-        add(fieldPane, BorderLayout.CENTER);
+        JPanel fieldsContainer = new JPanel(new GridLayout(0, 1, 0, 10));
+        fieldsContainer.add(populationSizeField);
+        fieldsContainer.add(mutationRateField);
 
-        JButton jButton = new JButton("Commencer");
-        jButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mouseClicked(e);
-                executor.execute(new Runnable() {
-                    public void run() {
-                        geneticAlgorithm.start();
-                    }
-                });
-            }
-        });
-        add(jButton, BorderLayout.PAGE_END);
+        JPanel formContainer = new JPanel();
+        formContainer.add(labelsContainer);
+        formContainer.add(fieldsContainer);
+        add(titleLabel);
+        add(formContainer);
+        add(startButton);
+    }
+
+    class Controller implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            executor.execute(new Runnable() {
+                public void run() {
+                    geneticAlgorithm.start();
+                }
+            });
+        }
     }
 
 }

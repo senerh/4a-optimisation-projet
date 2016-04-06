@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -35,19 +36,21 @@ public class Informations extends JPanel implements Observer {
     public Informations(GeneticAlgorithm geneticAlgorithm) {
         this.geneticAlgorithm = geneticAlgorithm;
         geneticAlgorithm.addObserver(this);
+        setLayout(new GridLayout());
+        setBorder(BorderFactory.createEmptyBorder(0, 20, 10, 20));
         build();
     }
     
     private void build() {
-        JPanel component = new JPanel(new GridLayout(0, 1));
-        titleLabel = new JLabel(titleString);
+        titleLabel = new JLabel(titleString, JLabel.CENTER);
         fitnessLabel = new JLabel(fitnessString);
         nbCentersLabel = new JLabel(nbCentersString);
         nbSeatsLabel = new JLabel(nbSeatsString);
         nbUsedSeatsLabel = new JLabel(nbUsedSeatsString);
         nbUnusedSeatsLabel = new JLabel(nbUnusedSeatsString);
         totalDistanceLabel = new JLabel(totalDistanceString);
-        
+
+        JPanel component = new JPanel(new GridLayout(0, 1));
         component.add(titleLabel);
         component.add(fitnessLabel);
         component.add(nbCentersLabel);
@@ -55,7 +58,6 @@ public class Informations extends JPanel implements Observer {
         component.add(nbUsedSeatsLabel);
         component.add(nbUnusedSeatsLabel);
         component.add(totalDistanceLabel);
-        
         add(component);
     }
 

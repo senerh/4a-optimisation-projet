@@ -68,10 +68,12 @@ public class Solution {
         Place nearestCenter = null;
         float nearestDistance = Float.MAX_VALUE;
         int index = 0;
+        Place center;
+        float distance;
         for (Boolean isCenter : listPlaces) {
-            Place center = map.getListPlaces().get(index);
+            center = map.getListPlaces().get(index);
             if (isCenter && isAvailable(center, agency)) {
-                float distance = distFrom(agency.getLatitude(), agency.getLongitude(), center.getLatitude(), center.getLongitude());
+                distance = distFrom(agency.getLatitude(), agency.getLongitude(), center.getLatitude(), center.getLongitude());
                 if (distance < nearestDistance) {
                     nearestDistance = distance;
                     nearestCenter = center;
