@@ -10,15 +10,19 @@ public class GeneticAlgorithm extends Observable {
     private Population population;
     private Solution bestSolution;
     private boolean isStarted;
+    private int size;
+    private float mutationRate;
     
     public GeneticAlgorithm(Map map) {
         this.map = map;
         isStarted = false;
     }
     
-    public void start() {
+    public void start(int _size, float _mutationRate) {
         isStarted = true;
-        population = new Population(10, map);
+        size = _size;
+        mutationRate = _mutationRate;
+        population = new Population(size, map);
         bestSolution = population.getBestSolution();
         
         setChanged();

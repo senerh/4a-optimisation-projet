@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -45,8 +46,8 @@ public class Form extends JPanel {
         populationSizeLabel = new JLabel(populationSizeString);
         mutationRateLabel = new JLabel(mutationRateString);
 
-        populationSizeField = new JTextField(5);
-        mutationRateField = new JTextField(5);
+        populationSizeField = new JTextField("10", 5);
+        mutationRateField = new JTextField("0", 5);
 
         startButton = new JButton(startString);
         startButton.addActionListener(new Controller());
@@ -69,11 +70,20 @@ public class Form extends JPanel {
 
     class Controller implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            executor.execute(new Runnable() {
-                public void run() {
-                    geneticAlgorithm.start();
-                }
-            });
+            try {
+                final int populationSize = Integer.parseInt(populationSizeField.getText());
+                final float mutationRate = Float.parseFloat(mutationRateField.getText());
+                executor.execute(new Runnable() {
+                    public void run() {
+                        geneticAlgorithm.start(populationSize, mutationRate);
+                    }
+                });
+            } catch (NumberFormatException e1) {
+                JOptionPane.showMessageDialog(Form.this,
+                        "Données saisies incorrectes",
+                        "Mais respecte toi....",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
