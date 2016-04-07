@@ -19,6 +19,21 @@ public class Solution {
     private float fitness;
     private float totalDistance;
 
+    private Solution(
+            Map map,
+            List<Boolean> listPlaces,
+            java.util.Map<Place, List<Agency>> solution,
+            Random random,
+            float fitness,
+            float totalDistance) {
+        this.map = map;
+        this.listPlaces = listPlaces;
+        this.solution = solution;
+        this.random = random;
+        this.fitness = fitness;
+        this.totalDistance = totalDistance;
+    }
+
     public Solution(Map map) {
         this.map = map;
         random = new Random();
@@ -146,6 +161,14 @@ public class Solution {
     
     public float getTotalDistance() {
         return totalDistance;
+    }
+
+    @Override
+    protected Solution clone() {
+        List<Boolean> clonedListPlaces = new ArrayList<Boolean>(listPlaces);
+        java.util.Map<Place, List<Agency>> clonedSolution = new HashMap<Place, List<Agency>>(solution);
+        
+        return new Solution(map, clonedListPlaces, clonedSolution, random, fitness, totalDistance);
     }
 
 }

@@ -23,7 +23,7 @@ public class GeneticAlgorithm extends Observable {
         size = _size;
         mutationRate = _mutationRate;
         population = new Population(size, map);
-        bestSolution = population.getBestSolution();
+        bestSolution = population.getBestSolution().clone();
         
         setChanged();
         notifyObservers();
