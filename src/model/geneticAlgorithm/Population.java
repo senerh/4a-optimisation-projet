@@ -8,10 +8,12 @@ import model.Map;
 public class Population {
     
     private List<Solution> listSolutions;
+    private int size;
     
     public Population(int size, Map map) {
-        listSolutions = new ArrayList<Solution>();
+        this.size = size;
         
+        listSolutions = new ArrayList<Solution>();
         for (int i=0; i<size; i++) {
             listSolutions.add(new Solution(map));
         }
@@ -25,5 +27,17 @@ public class Population {
             }
         }
         return bestSolution;
+    }
+    
+    public void reproduce() {
+        //TODO: coder
+    }
+    
+    public List<Solution> getListSolutions() {
+        return listSolutions;
+    }
+    
+    public int getSize() {
+        return size;
     }
 }
