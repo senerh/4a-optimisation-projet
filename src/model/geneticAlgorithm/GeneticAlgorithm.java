@@ -27,6 +27,17 @@ public class GeneticAlgorithm extends Observable {
         
         setChanged();
         notifyObservers();
+        
+        System.out.println("generation 1");
+        for (Solution solution : population.getListSolutions()) {
+            System.out.println("fitness : " + solution.getFitness());
+        }
+        
+        population.reproduce();
+        System.out.println("generation 2");
+        for (Solution solution : population.getListSolutions()) {
+            System.out.println("fitness : " + solution.getFitness());
+        }
     }
     
     public Solution getBestSolution() {

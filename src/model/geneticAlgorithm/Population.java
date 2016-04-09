@@ -30,7 +30,7 @@ public class Population {
     }
     
     public void reproduce() {
-        //TODO: coder
+        listSolutions = new Wheel(this).getNewSolutions();
     }
     
     public List<Solution> getListSolutions() {

@@ -1,19 +1,18 @@
 package model.geneticAlgorithm;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 public class Wheel {
     
     private Population population;
-    private HashMap<Float, Solution> wheel;
+    private List<Float> cumulatedProbs;
     private Random random;
 
     public Wheel(Population population) {
         this.population = population;
-        wheel = new HashMap<Float, Solution>();
+        cumulatedProbs = new ArrayList<Float>();
         random = new Random();
         calculate();
     }
@@ -21,32 +20,35 @@ public class Wheel {
     private void calculate() {
         float totalFitness = 0;
         for (Solution solution : population.getListSolutions()) {
-            totalFitness += solution.getFitness();
+            totalFitness += 1 / solution.getFitness();
         }
 
         float cumulatedFitness = 0;
         for (Solution solution : population.getListSolutions()) {
-            cumulatedFitness += solution.getFitness();
-            wheel.put(cumulatedFitness / totalFitness, solution);
+            cumulatedFitness += 1 / solution.getFitness();
+            cumulatedProbs.add(cumulatedFitness / totalFitness);
         }
     }
     
-    public List<Solution> turn() {
+    public List<Solution> getNewSolutions() {
         List<Solution> listSolutions = new ArrayList<Solution>();
         for (int i=0; i<population.getSize(); i++) {
-            float index = random.nextFloat();
-            //TODO: continuer
+            Solution solution = turn();
+            listSolutions.add(solution.clone());
         }
         return listSolutions;
     }
     
-    private Solution getSolution(float index) {
+    public Solution turn() {
+        float probability = random.nextFloat();
         Solution solution = null;
-        for (Float cumulatedFitness : wheel.keySet()) {
-            if (index <= cumulatedFitness) {
-                solution = wheel.get(cumulatedFitness);
+        int index = 0;
+        for (Float cumulatedProb : cumulatedProbs) {
+            if (probability <= cumulatedProb) {
+                solution = population.getListSolutions().get(index);
                 break;
             }
+            index++;
         }
         return solution;
     }
