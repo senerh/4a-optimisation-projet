@@ -67,7 +67,7 @@ public class Solution {
         associateAgencies();
     }
 
-    private void associateAgencies() {
+    public void associateAgencies() {
         solution.clear();
         List<Agency> listAgencies = new ArrayList<Agency>(map.getListAgencies());
         while (!listAgencies.isEmpty()) {
@@ -169,6 +169,22 @@ public class Solution {
         java.util.Map<Place, List<Agency>> clonedSolution = new HashMap<Place, List<Agency>>(solution);
         
         return new Solution(map, clonedListPlaces, clonedSolution, random, fitness, totalDistance);
+    }
+    
+    public void cross(Solution other) {
+        int index = random.nextInt(Math.min(listPlaces.size(), other.listPlaces.size()));
+        cross(other, index);
+    }
+    
+    private void cross(Solution other, int index) {
+        List<Boolean> l1 = new ArrayList<Boolean>(listPlaces.subList(0, index));
+        l1.addAll(other.listPlaces.subList(index, other.listPlaces.size()));
+        
+        List<Boolean> l2 = new ArrayList<Boolean>(other.listPlaces.subList(0, index));
+        l2.addAll(listPlaces.subList(index, listPlaces.size()));
+        
+        listPlaces = l1;
+        other.listPlaces = l2;
     }
 
 }

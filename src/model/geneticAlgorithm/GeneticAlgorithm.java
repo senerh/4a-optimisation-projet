@@ -25,19 +25,27 @@ public class GeneticAlgorithm extends Observable {
         population = new Population(size, map);
         bestSolution = population.getBestSolution().clone();
         
+        display();
+        
+        Solution currentBestSolution;
+        int i = 0;
+        while (true) {
+            i++;
+            population.reproduce();
+            population.cross();
+            population.calculateFitness();
+            currentBestSolution = population.getBestSolution();
+            System.out.println("generation " + i + " : " + currentBestSolution.getFitness());
+            if (currentBestSolution.getFitness() < bestSolution.getFitness()) {
+                bestSolution = currentBestSolution.clone();
+                display();
+            }
+        }
+    }
+    
+    private void display() {
         setChanged();
         notifyObservers();
-        
-        System.out.println("generation 1");
-        for (Solution solution : population.getListSolutions()) {
-            System.out.println("fitness : " + solution.getFitness());
-        }
-        
-        population.reproduce();
-        System.out.println("generation 2");
-        for (Solution solution : population.getListSolutions()) {
-            System.out.println("fitness : " + solution.getFitness());
-        }
     }
     
     public Solution getBestSolution() {
