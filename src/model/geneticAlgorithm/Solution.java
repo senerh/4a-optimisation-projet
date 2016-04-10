@@ -186,5 +186,13 @@ public class Solution {
         listPlaces = l1;
         other.listPlaces = l2;
     }
+    
+    public void mutate(float mutationRate) {
+        int nbMutations = (int) (listPlaces.size() * mutationRate);
+        for (int i=0; i<nbMutations; i++) {
+            int index = random.nextInt(listPlaces.size());
+            listPlaces.set(index, !listPlaces.get(index));
+        }
+    }
 
 }

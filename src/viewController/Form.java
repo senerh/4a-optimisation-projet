@@ -47,7 +47,7 @@ public class Form extends JPanel {
         mutationRateLabel = new JLabel(mutationRateString);
 
         populationSizeField = new JTextField("10", 5);
-        mutationRateField = new JTextField("0", 5);
+        mutationRateField = new JTextField("0.01", 5);
 
         startButton = new JButton(startString);
         startButton.addActionListener(new Controller());

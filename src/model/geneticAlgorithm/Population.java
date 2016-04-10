@@ -33,14 +33,23 @@ public class Population {
         }
         return bestSolution;
     }
-    
+
     public void reproduce() {
         listSolutions = new Wheel(this).getNewSolutions();
     }
     
     public void cross() {
-        for (Solution solution : listSolutions) {
-            solution.cross(listSolutions.get(random.nextInt(listSolutions.size())));
+        int n = listSolutions.size();
+        for (int i=0; i+2<=n; i += 2) {
+            listSolutions.get(i).cross(listSolutions.get(i + 1));
+        }
+    }
+    
+    public void mutate(float mutationRate) {
+        int nbMutations = (int) (listSolutions.size() / 10);
+        for (int i=0; i<nbMutations; i++) {
+            int index = random.nextInt(listSolutions.size());
+            listSolutions.get(index).mutate(mutationRate);
         }
     }
     

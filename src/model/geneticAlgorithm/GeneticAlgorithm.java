@@ -29,10 +29,12 @@ public class GeneticAlgorithm extends Observable {
         
         Solution currentBestSolution;
         int i = 0;
+        System.out.println("generation " + i + " : " + bestSolution.getFitness());
         while (true) {
             i++;
             population.reproduce();
             population.cross();
+            population.mutate(mutationRate);
             population.calculateFitness();
             currentBestSolution = population.getBestSolution();
             System.out.println("generation " + i + " : " + currentBestSolution.getFitness());
