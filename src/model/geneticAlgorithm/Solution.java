@@ -46,16 +46,21 @@ public class Solution {
         int nbPersons = map.getNbPersons();
 
         listPlaces = new ArrayList<Boolean>();
-        int nbCenters = 0;
         for (int i=0; i<nbPlaces; i++) {
-            if (random.nextBoolean()) {
+            listPlaces.add(false);
+        }
+        
+        int nbCenters = 0;
+        int n = 2 * nbPersons / Model.NB_PERSONS_BY_CENTER;
+        for (int i=0; i<n; i++) {
+            int index = random.nextInt(nbPlaces);
+            if (!listPlaces.get(index)) {
+                listPlaces.set(index, true);
                 nbCenters++;
-                listPlaces.add(true);
-            } else {
-                listPlaces.add(false);
             }
         }
 
+        //TODO: est-ce vraiment utile ?
         while (nbCenters * Model.NB_PERSONS_BY_CENTER < nbPersons) {
             int index = random.nextInt(nbPlaces);
             if (!listPlaces.get(index)) {
