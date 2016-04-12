@@ -13,17 +13,19 @@ public class GeneticAlgorithm extends Observable {
     private int size;
     private float mutationRate;
     private int keptPopulationSize;
+    private int mutatedPopulationSize;
     
     public GeneticAlgorithm(Map map) {
         this.map = map;
         isStarted = false;
     }
     
-    public void start(int _size, float _mutationRate, int _keptPopulationSize) {
+    public void start(int _size, float _mutationRate, int _keptPopulationSize, int _mutatedPopulationSize) {
         isStarted = true;
         size = _size;
         mutationRate = _mutationRate;
         keptPopulationSize = _keptPopulationSize;
+        mutatedPopulationSize = _mutatedPopulationSize;
         population = new Population(size, map);
         bestSolution = population.getBestSolution().clone();
         
@@ -36,7 +38,7 @@ public class GeneticAlgorithm extends Observable {
             i++;
             population.reproduce(keptPopulationSize);
             population.cross();
-            population.mutate(mutationRate);
+            population.mutate(mutationRate, mutatedPopulationSize);
             population.calculateFitness();
             currentBestSolution = population.getBestSolution();
             System.out.println("generation " + i + " : " + currentBestSolution.getFitness());

@@ -45,9 +45,8 @@ public class Population {
         }
     }
     
-    public void mutate(float mutationRate) {
-        int nbMutations = (int) (listSolutions.size() / 10);
-        for (int i=0; i<nbMutations; i++) {
+    public void mutate(float mutationRate, int mutatedPopulationSize) {
+        for (int i=0; i<mutatedPopulationSize; i++) {
             int index = random.nextInt(listSolutions.size());
             listSolutions.get(index).mutate(mutationRate);
         }

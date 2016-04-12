@@ -25,15 +25,18 @@ public class Form extends JPanel {
     private String populationSizeString = "Taille de la population : ";
     private String mutationRateString = "Taux de mutation : ";
     private String keptPopulationSizeString = "Taille de la population gardée : ";
+    private String mutatedPopulationSizeString = "Taille de la population mutée : ";
 
     private JLabel titleLabel;
     private JLabel populationSizeLabel;
     private JLabel mutationRateLabel;
     private JLabel keptPopulationSizeLabel;
+    private JLabel mutatedPopulationSizeLabel;
 
     private JTextField populationSizeField;
     private JTextField mutationRateField;
     private JTextField keptPopulationSizeField;
+    private JTextField mutatedPopulationSizeField;
 
     private JButton startButton;
 
@@ -49,10 +52,12 @@ public class Form extends JPanel {
         populationSizeLabel = new JLabel(populationSizeString);
         mutationRateLabel = new JLabel(mutationRateString);
         keptPopulationSizeLabel = new JLabel(keptPopulationSizeString);
+        mutatedPopulationSizeLabel = new JLabel(mutatedPopulationSizeString);
 
         populationSizeField = new JTextField("100", 5);
         mutationRateField = new JTextField("0.01", 5);
         keptPopulationSizeField = new JTextField("10", 5);
+        mutatedPopulationSizeField = new JTextField("10", 5);
 
         startButton = new JButton(startString);
         startButton.addActionListener(new Controller());
@@ -61,11 +66,13 @@ public class Form extends JPanel {
         labelsContainer.add(populationSizeLabel);
         labelsContainer.add(mutationRateLabel);
         labelsContainer.add(keptPopulationSizeLabel);
+        labelsContainer.add(mutatedPopulationSizeLabel);
 
         JPanel fieldsContainer = new JPanel(new GridLayout(0, 1, 0, 10));
         fieldsContainer.add(populationSizeField);
         fieldsContainer.add(mutationRateField);
         fieldsContainer.add(keptPopulationSizeField);
+        fieldsContainer.add(mutatedPopulationSizeField);
 
         JPanel formContainer = new JPanel();
         formContainer.add(labelsContainer);
@@ -81,9 +88,10 @@ public class Form extends JPanel {
                 final int populationSize = Integer.parseInt(populationSizeField.getText());
                 final float mutationRate = Float.parseFloat(mutationRateField.getText());
                 final int keptPopulationSize = Integer.parseInt(keptPopulationSizeField.getText());
+                final int mutatedPopulationSize = Integer.parseInt(mutatedPopulationSizeField.getText());
                 executor.execute(new Runnable() {
                     public void run() {
-                        geneticAlgorithm.start(populationSize, mutationRate, keptPopulationSize);
+                        geneticAlgorithm.start(populationSize, mutationRate, keptPopulationSize, mutatedPopulationSize);
                     }
                 });
             } catch (NumberFormatException e1) {
