@@ -34,8 +34,8 @@ public class Population {
         return bestSolution;
     }
 
-    public void reproduce() {
-        listSolutions = new Wheel(this).getNewSolutions();
+    public void reproduce(int keptPopulationSize) {
+        listSolutions = new Wheel(this, keptPopulationSize).getNewSolutions();
     }
     
     public void cross() {

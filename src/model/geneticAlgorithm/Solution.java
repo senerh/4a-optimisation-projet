@@ -11,7 +11,7 @@ import model.Map;
 import model.Model;
 import model.Place;
 
-public class Solution {
+public class Solution implements Comparable<Solution> {
     private Map map;
     private List<Boolean> listPlaces;
     private java.util.Map<Place, List<Agency>> solution;
@@ -198,6 +198,15 @@ public class Solution {
             int index = random.nextInt(listPlaces.size());
             listPlaces.set(index, !listPlaces.get(index));
         }
+    }
+
+    public int compareTo(Solution other) {
+        return (int) (getFitness() - other.getFitness());
+    }
+    
+    @Override
+    public String toString() {
+        return "[Solution (" + fitness + ")]";
     }
 
 }

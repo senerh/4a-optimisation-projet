@@ -24,13 +24,16 @@ public class Form extends JPanel {
     private String titleString = "<html><h3>Algorithme génétique</h3></html>";
     private String populationSizeString = "Taille de la population : ";
     private String mutationRateString = "Taux de mutation : ";
+    private String keptPopulationSizeString = "Taille de la population gardée : ";
 
     private JLabel titleLabel;
     private JLabel populationSizeLabel;
     private JLabel mutationRateLabel;
+    private JLabel keptPopulationSizeLabel;
 
     private JTextField populationSizeField;
     private JTextField mutationRateField;
+    private JTextField keptPopulationSizeField;
 
     private JButton startButton;
 
@@ -45,9 +48,11 @@ public class Form extends JPanel {
         titleLabel = new JLabel(titleString);
         populationSizeLabel = new JLabel(populationSizeString);
         mutationRateLabel = new JLabel(mutationRateString);
+        keptPopulationSizeLabel = new JLabel(keptPopulationSizeString);
 
-        populationSizeField = new JTextField("10", 5);
+        populationSizeField = new JTextField("100", 5);
         mutationRateField = new JTextField("0.01", 5);
+        keptPopulationSizeField = new JTextField("10", 5);
 
         startButton = new JButton(startString);
         startButton.addActionListener(new Controller());
@@ -55,10 +60,12 @@ public class Form extends JPanel {
         JPanel labelsContainer = new JPanel(new GridLayout(0, 1, 0, 10));
         labelsContainer.add(populationSizeLabel);
         labelsContainer.add(mutationRateLabel);
+        labelsContainer.add(keptPopulationSizeLabel);
 
         JPanel fieldsContainer = new JPanel(new GridLayout(0, 1, 0, 10));
         fieldsContainer.add(populationSizeField);
         fieldsContainer.add(mutationRateField);
+        fieldsContainer.add(keptPopulationSizeField);
 
         JPanel formContainer = new JPanel();
         formContainer.add(labelsContainer);
@@ -73,9 +80,10 @@ public class Form extends JPanel {
             try {
                 final int populationSize = Integer.parseInt(populationSizeField.getText());
                 final float mutationRate = Float.parseFloat(mutationRateField.getText());
+                final int keptPopulationSize = Integer.parseInt(keptPopulationSizeField.getText());
                 executor.execute(new Runnable() {
                     public void run() {
-                        geneticAlgorithm.start(populationSize, mutationRate);
+                        geneticAlgorithm.start(populationSize, mutationRate, keptPopulationSize);
                     }
                 });
             } catch (NumberFormatException e1) {
