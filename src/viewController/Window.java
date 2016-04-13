@@ -10,8 +10,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.swing.BorderFactory;
 import javax.swing.JFileChooser;
@@ -24,7 +22,7 @@ import javax.swing.JPanel;
 
 import model.Model;
 
-public class Window extends JFrame implements Observer {
+public class Window extends JFrame {
 
     private static final long serialVersionUID = -5494106475468177190L;
     public static final int WIDTH = 800;
@@ -125,9 +123,5 @@ public class Window extends JFrame implements Observer {
         menuBar.add(menuFile);
 
         setJMenuBar(menuBar);
-    }
-
-    public void update(Observable arg0, Object arg1) {
-        //TODO
     }
 }

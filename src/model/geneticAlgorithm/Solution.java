@@ -50,22 +50,11 @@ public class Solution implements Comparable<Solution> {
             listPlaces.add(false);
         }
         
-        int nbCenters = 0;
-        int n = 2 * nbPersons / Model.NB_PERSONS_BY_CENTER;
+        int n = nbPersons / Model.NB_PERSONS_BY_CENTER;
         for (int i=0; i<n; i++) {
             int index = random.nextInt(nbPlaces);
             if (!listPlaces.get(index)) {
                 listPlaces.set(index, true);
-                nbCenters++;
-            }
-        }
-
-        //TODO: est-ce vraiment utile ?
-        while (nbCenters * Model.NB_PERSONS_BY_CENTER < nbPersons) {
-            int index = random.nextInt(nbPlaces);
-            if (!listPlaces.get(index)) {
-                listPlaces.set(index, true);
-                nbCenters++;
             }
         }
         
@@ -101,8 +90,9 @@ public class Solution implements Comparable<Solution> {
             }
             index++;
         }
-        //TODO: vérifier si nearestCenter=null ??? Cela voudrait dire qu'il n'y a pas assez de centres pour accueillir toutes les agences
-        if (solution.containsKey(nearestCenter)) {
+        if (nearestCenter == null) {
+            addCenter(agency);
+        } else if (solution.containsKey(nearestCenter)) {
             solution.get(nearestCenter).add(agency);
         } else {
             List<Agency> l = new ArrayList<Agency>();
@@ -111,6 +101,33 @@ public class Solution implements Comparable<Solution> {
         }
     }
     
+    private void addCenter(Agency agency) {
+        int index = 0;
+        float nearestDist = Float.MAX_VALUE;
+        int nearestPlaceIndex = 0;
+        Place nearestPlace = null;
+        Place currentPlace = null;
+        float currentDist;
+        for (Boolean isCenter : listPlaces) {
+            if (!isCenter) {
+                currentPlace = map.getListPlaces().get(index);
+                currentDist = distFrom(agency.getLatitude(), agency.getLongitude(), currentPlace.getLatitude(), currentPlace.getLongitude());
+                if (currentDist < nearestDist) {
+                    nearestDist = currentDist;
+                    nearestPlaceIndex = index;
+                    nearestPlace = currentPlace;
+                }
+            }
+            index++;
+        }
+        //Si nearestCenter est null, cela voudrait dire qu'il n'y a pas assez de villes pour accueillir les centres.
+        //Le problème ne peut donc pas être résolu.
+        listPlaces.set(nearestPlaceIndex, true);
+        List<Agency> l = new ArrayList<Agency>();
+        l.add(agency);
+        solution.put(nearestPlace, l);
+    }
+
     private void removeUselessCenters() {
         int index = 0;
         for (Boolean isCenter : listPlaces) {

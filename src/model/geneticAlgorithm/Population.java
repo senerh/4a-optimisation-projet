@@ -1,6 +1,7 @@
 package model.geneticAlgorithm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -23,15 +24,8 @@ public class Population {
         }
     }
 
-    //TODO: chercher à optimiser
     public Solution getBestSolution() {
-        Solution bestSolution = listSolutions.get(0);
-        for (Solution solution : listSolutions) {
-            if (solution.getFitness() < bestSolution.getFitness()) {
-                bestSolution = solution;
-            }
-        }
-        return bestSolution;
+        return Collections.min(listSolutions);
     }
 
     public void reproduce(int keptPopulationSize) {
