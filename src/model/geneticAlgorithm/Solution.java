@@ -43,19 +43,10 @@ public class Solution implements Comparable<Solution> {
     
     private void generateRandomSolution() {
         int nbPlaces = map.getListPlaces().size();
-        int nbPersons = map.getNbPersons();
 
         listPlaces = new ArrayList<Boolean>();
         for (int i=0; i<nbPlaces; i++) {
             listPlaces.add(false);
-        }
-        
-        int n = nbPersons / Model.NB_PERSONS_BY_CENTER;
-        for (int i=0; i<n; i++) {
-            int index = random.nextInt(nbPlaces);
-            if (!listPlaces.get(index)) {
-                listPlaces.set(index, true);
-            }
         }
         
         associateAgencies();
