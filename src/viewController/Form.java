@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -21,11 +22,13 @@ public class Form extends JPanel {
     private static ExecutorService executor = Executors.newFixedThreadPool(1);
 
     private String startString = "Démarrer";
+    private String updateString = "Modifier";
     private String titleString = "<html><h3>Algorithme génétique</h3></html>";
     private String populationSizeString = "Taille de la population : ";
     private String mutationRateString = "Taux de mutation : ";
     private String keptPopulationSizeString = "Taille de la population gardée : ";
     private String mutatedPopulationSizeString = "Taille de la population mutée : ";
+    private String stopString = "Arreter";
 
     private JLabel titleLabel;
     private JLabel populationSizeLabel;
@@ -39,14 +42,12 @@ public class Form extends JPanel {
     private JTextField mutatedPopulationSizeField;
 
     private JButton startButton;
+    private JButton stopButton;
 
     private GeneticAlgorithm geneticAlgorithm;
-    
-    private Controller controller;
 
     public Form(GeneticAlgorithm geneticAlgorithm) {
         this.geneticAlgorithm = geneticAlgorithm;
-        controller = new Controller();
         build();
     }
 
@@ -63,7 +64,11 @@ public class Form extends JPanel {
         mutatedPopulationSizeField = new JTextField("10", 5);
 
         startButton = new JButton(startString);
-        startButton.addActionListener(controller);
+        startButton.addActionListener(new StartController());
+        
+        stopButton = new JButton(stopString);
+        stopButton.addActionListener(new StopController());
+        stopButton.setEnabled(false);
 
         JPanel labelsContainer = new JPanel(new GridLayout(0, 1, 0, 10));
         labelsContainer.add(populationSizeLabel);
@@ -83,9 +88,10 @@ public class Form extends JPanel {
         add(titleLabel);
         add(formContainer);
         add(startButton);
+        add(stopButton);
     }
 
-    class Controller implements ActionListener {
+    class StartController implements ActionListener {
         
         private int populationSize;
         private float mutationRate;
@@ -181,11 +187,28 @@ public class Form extends JPanel {
                                 geneticAlgorithm.start(populationSize, mutationRate, keptPopulationSize, mutatedPopulationSize);
                             }
                         });
-                        startButton.setText("Modifier");
+                        startButton.setText(updateString);
+                        stopButton.setEnabled(true);
                     }
                 }
             }
         }
+    }
+    
+    class StopController implements ActionListener {
+
+        public void actionPerformed(ActionEvent arg0) {
+            geneticAlgorithm.stop();
+            executor.shutdown();
+            try {
+                executor.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            startButton.setEnabled(false);
+            stopButton.setEnabled(false);
+        }
+        
     }
 
 }

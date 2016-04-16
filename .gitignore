@@ -26,3 +26,5 @@ bin/
 out/
 
 resources/images/france_map.pfi
+
+*.csv

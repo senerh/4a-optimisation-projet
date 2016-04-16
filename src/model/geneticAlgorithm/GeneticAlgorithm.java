@@ -3,6 +3,7 @@ package model.geneticAlgorithm;
 import java.util.Observable;
 
 import model.Map;
+import model.history.History;
 
 public class GeneticAlgorithm extends Observable {
     
@@ -10,13 +11,15 @@ public class GeneticAlgorithm extends Observable {
     private Population population;
     private Solution bestSolution;
     private boolean isStarted;
-    private int size;
+    private int populationSize;
     private float mutationRate;
     private int keptPopulationSize;
     private int mutatedPopulationSize;
     private float newMutationRate;
     private int newKeptPopulationSize;
     private int newMutatedPopulationSize;
+    private History history;
+    private boolean isStopped;
     
     public GeneticAlgorithm(Map map) {
         this.map = map;
@@ -26,27 +29,37 @@ public class GeneticAlgorithm extends Observable {
     public void start(int size, float mutationRate, int keptPopulationSize, int mutatedPopulationSize) {
         if (!isStarted) {
             isStarted = true;
-            this.size = size;
+            isStopped = false;
+            this.populationSize = size;
+            this.mutationRate = mutationRate;
+            this.keptPopulationSize = keptPopulationSize;
+            this.mutatedPopulationSize = mutatedPopulationSize;
             updateParameters(mutationRate, keptPopulationSize, mutatedPopulationSize);
             population = new Population(size, map);
             bestSolution = population.getBestSolution().clone();
             
             updateView();
             
+            history = new History(this);
+            history.add();
+            
             loop();
+            
+            history.save();
         }
     }
     
     private void loop() {
         int generation = 0;
         System.out.println("generation " + generation + " : " + bestSolution.getFitness());
-        while (true) {
+        while (!isStopped) {
             generation++;
             setNewParameters();
             population.reproduce(keptPopulationSize);
             population.cross();
             population.mutate(mutationRate, mutatedPopulationSize);
             population.calculateFitness();
+            history.add();
             System.out.println("generation " + generation + " : " + population.getBestSolution().getFitness());
             if (population.getBestSolution().getFitness() < bestSolution.getFitness()) {
                 bestSolution = population.getBestSolution().clone();
@@ -80,8 +93,8 @@ public class GeneticAlgorithm extends Observable {
         return map;
     }
 
-    public int getSize() {
-        return size;
+    public int getPopulationSize() {
+        return populationSize;
     }
 
     public void updateParameters(float mutationRate, int keptPopulationSize, int mutatedPopulationSize) {
@@ -95,4 +108,25 @@ public class GeneticAlgorithm extends Observable {
         keptPopulationSize = newKeptPopulationSize;
         mutatedPopulationSize = newMutatedPopulationSize;
     }
+
+    public Population getPopulation() {
+        return population;
+    }
+
+    public float getMutationRate() {
+        return mutationRate;
+    }
+
+    public int getKeptPopulationSize() {
+        return keptPopulationSize;
+    }
+
+    public int getMutatedPopulationSize() {
+        return mutatedPopulationSize;
+    }
+    
+    public void stop() {
+        isStopped = true;
+    }
+
 }
