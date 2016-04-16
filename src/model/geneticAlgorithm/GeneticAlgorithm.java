@@ -14,42 +14,48 @@ public class GeneticAlgorithm extends Observable {
     private float mutationRate;
     private int keptPopulationSize;
     private int mutatedPopulationSize;
+    private float newMutationRate;
+    private int newKeptPopulationSize;
+    private int newMutatedPopulationSize;
     
     public GeneticAlgorithm(Map map) {
         this.map = map;
         isStarted = false;
     }
     
-    public void start(int _size, float _mutationRate, int _keptPopulationSize, int _mutatedPopulationSize) {
-        isStarted = true;
-        size = _size;
-        mutationRate = _mutationRate;
-        keptPopulationSize = _keptPopulationSize;
-        mutatedPopulationSize = _mutatedPopulationSize;
-        population = new Population(size, map);
-        bestSolution = population.getBestSolution().clone();
-        
-        display();
-        
-        Solution currentBestSolution;
-        int i = 0;
-        System.out.println("generation " + i + " : " + bestSolution.getFitness());
+    public void start(int size, float mutationRate, int keptPopulationSize, int mutatedPopulationSize) {
+        if (!isStarted) {
+            isStarted = true;
+            this.size = size;
+            updateParameters(mutationRate, keptPopulationSize, mutatedPopulationSize);
+            population = new Population(size, map);
+            bestSolution = population.getBestSolution().clone();
+            
+            updateView();
+            
+            loop();
+        }
+    }
+    
+    private void loop() {
+        int generation = 0;
+        System.out.println("generation " + generation + " : " + bestSolution.getFitness());
         while (true) {
-            i++;
+            generation++;
+            setNewParameters();
             population.reproduce(keptPopulationSize);
             population.cross();
             population.mutate(mutationRate, mutatedPopulationSize);
             population.calculateFitness();
-            currentBestSolution = population.getBestSolution();
-            System.out.println("generation " + i + " : " + currentBestSolution.getFitness());
-            if (currentBestSolution.getFitness() < bestSolution.getFitness()) {
-                bestSolution = currentBestSolution.clone();
-                display();
+            System.out.println("generation " + generation + " : " + population.getBestSolution().getFitness());
+            if (population.getBestSolution().getFitness() < bestSolution.getFitness()) {
+                bestSolution = population.getBestSolution().clone();
+                updateView();
             }
         }
     }
-    
-    private void display() {
+
+    private void updateView() {
         setChanged();
         notifyObservers();
     }
@@ -69,5 +75,24 @@ public class GeneticAlgorithm extends Observable {
     public int getNbPersons() {
         return map.getNbPersons();
     }
+    
+    public Map getMap() {
+        return map;
+    }
 
+    public int getSize() {
+        return size;
+    }
+
+    public void updateParameters(float mutationRate, int keptPopulationSize, int mutatedPopulationSize) {
+        newMutationRate = mutationRate;
+        newKeptPopulationSize = keptPopulationSize;
+        newMutatedPopulationSize = mutatedPopulationSize;
+    }
+    
+    private void setNewParameters() {
+        mutationRate = newMutationRate;
+        keptPopulationSize = newKeptPopulationSize;
+        mutatedPopulationSize = newMutatedPopulationSize;
+    }
 }

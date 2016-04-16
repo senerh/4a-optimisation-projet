@@ -99,19 +99,25 @@ public class Window extends JFrame {
         JMenuItem menuItemOpen = new JMenuItem("Ouvrir");
         menuItemOpen.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                JFileChooser fc = new JFileChooser(".");
-                int returnVal = fc.showOpenDialog(Window.this);
+                if (model.getGeneticAlgorithm().getIsStarted()) {
+                    JOptionPane.showMessageDialog(Window.this,
+                            "Vous ne pouvez pas charger un jeu de données pendant l'exécution de l'algorithme.",
+                            "Algorithme déjà démarré.",
+                            JOptionPane.ERROR_MESSAGE);
+                } else {
+                    JFileChooser fc = new JFileChooser(".");
+                    int returnVal = fc.showOpenDialog(Window.this);
 
-                if (returnVal == JFileChooser.APPROVE_OPTION) {
-                    File file = fc.getSelectedFile();
-                    try {
-                        model.getGeneticAlgorithm().setIsStarted(false);
-                        model.getMap().loadAgencies(file.getAbsolutePath());
-                    } catch (IOException e) {
-                        JOptionPane.showMessageDialog(Window.this,
-                                "Vérifiez que le format du fichier est correcte et que vous disposez des droits de lecture.",
-                                "Erreur lors du la lecture du fichier",
-                                JOptionPane.ERROR_MESSAGE);
+                    if (returnVal == JFileChooser.APPROVE_OPTION) {
+                        File file = fc.getSelectedFile();
+                        try {
+                            model.getMap().loadAgencies(file.getAbsolutePath());
+                        } catch (IOException e) {
+                            JOptionPane.showMessageDialog(Window.this,
+                                    "Vérifiez que le format du fichier est correcte et que vous disposez des droits de lecture.",
+                                    "Erreur lors du la lecture du fichier",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 }
             }

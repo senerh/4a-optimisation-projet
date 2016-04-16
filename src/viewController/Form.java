@@ -41,9 +41,12 @@ public class Form extends JPanel {
     private JButton startButton;
 
     private GeneticAlgorithm geneticAlgorithm;
+    
+    private Controller controller;
 
     public Form(GeneticAlgorithm geneticAlgorithm) {
         this.geneticAlgorithm = geneticAlgorithm;
+        controller = new Controller();
         build();
     }
 
@@ -60,7 +63,7 @@ public class Form extends JPanel {
         mutatedPopulationSizeField = new JTextField("10", 5);
 
         startButton = new JButton(startString);
-        startButton.addActionListener(new Controller());
+        startButton.addActionListener(controller);
 
         JPanel labelsContainer = new JPanel(new GridLayout(0, 1, 0, 10));
         labelsContainer.add(populationSizeLabel);
@@ -83,22 +86,104 @@ public class Form extends JPanel {
     }
 
     class Controller implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            try {
-                final int populationSize = Integer.parseInt(populationSizeField.getText());
-                final float mutationRate = Float.parseFloat(mutationRateField.getText());
-                final int keptPopulationSize = Integer.parseInt(keptPopulationSizeField.getText());
-                final int mutatedPopulationSize = Integer.parseInt(mutatedPopulationSizeField.getText());
-                executor.execute(new Runnable() {
-                    public void run() {
-                        geneticAlgorithm.start(populationSize, mutationRate, keptPopulationSize, mutatedPopulationSize);
-                    }
-                });
-            } catch (NumberFormatException e1) {
+        
+        private int populationSize;
+        private float mutationRate;
+        private int keptPopulationSize;
+        private int mutatedPopulationSize;
+        
+        private boolean checkAgencies() {
+            if (geneticAlgorithm.getMap().getListAgencies().isEmpty()) {
                 JOptionPane.showMessageDialog(Form.this,
-                        "Données saisies incorrectes",
-                        "Mais respecte toi....",
+                        "Veuillez selectionner un jeu de données pour les agences.",
+                        "Il n'y a pas d'agence à affecter",
                         JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+            return true;
+        }
+
+        private boolean checkPopulationSize() {
+            try {
+                populationSize = Integer.parseInt(populationSizeField.getText());
+                if (populationSize < 10) {
+                    displayError("La taille de la population doit être supérieur ou égale à 10.");
+                    return false;
+                }
+            } catch (NumberFormatException e1) {
+                displayError("La taille de la population doit être un entier.");
+                return false;
+            }
+            return true;
+        }
+        
+        private boolean checkMutationRate() {
+            try {
+                mutationRate = Float.parseFloat(mutationRateField.getText());
+                if (mutationRate < 0 || mutationRate > 1) {
+                    displayError("Le taux de mutation doit être compris entre 0 et 1.");
+                    return false;
+                }
+            } catch (NumberFormatException e1) {
+                displayError("Le taux de mutation doit être un nombre décimale.");
+                return false;
+            }
+            return true;
+        }
+
+        private boolean checkKeptPopulationSize() {
+            try {
+                keptPopulationSize = Integer.parseInt(keptPopulationSizeField.getText());
+                if (keptPopulationSize < 1 || keptPopulationSize > populationSize) {
+                    displayError("La taille de la population gardée doit être comprise entre 1 et " + populationSize + ".");
+                    return false;
+                }
+            } catch (NumberFormatException e1) {
+                displayError("La taille de la population gardée doit être un entier.");
+                return false;
+            }
+            return true;
+        }
+
+        private boolean checkMutatedPopulationSize() {
+            try {
+                mutatedPopulationSize = Integer.parseInt(mutatedPopulationSizeField.getText());
+                if (mutatedPopulationSize < 0 || mutatedPopulationSize > populationSize) {
+                    displayError("La taille de la population mutée doit être comprise entre 0 et " + populationSize + ".");
+                    return false;
+                }
+            } catch (NumberFormatException e1) {
+                displayError("La taille de la population mutée doit être un entier.");
+                return false;
+            }
+            return true;
+        }
+        
+        private void displayError(String msg) {
+            JOptionPane.showMessageDialog(
+                    Form.this,
+                    msg,
+                    "Données du formulaires incorrectes.",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+        
+        public void actionPerformed(ActionEvent e) {
+            if (checkAgencies()) {
+                if (geneticAlgorithm.getIsStarted()) {
+                    if (checkMutationRate() && checkKeptPopulationSize() && checkMutatedPopulationSize()) {
+                        populationSizeField.setText("" + populationSize);
+                        geneticAlgorithm.updateParameters(mutationRate, keptPopulationSize, mutatedPopulationSize);
+                    }
+                } else {
+                    if (checkPopulationSize() && checkMutationRate() && checkKeptPopulationSize() && checkMutatedPopulationSize()) {
+                        executor.execute(new Runnable() {
+                            public void run() {
+                                geneticAlgorithm.start(populationSize, mutationRate, keptPopulationSize, mutatedPopulationSize);
+                            }
+                        });
+                        startButton.setText("Modifier");
+                    }
+                }
             }
         }
     }

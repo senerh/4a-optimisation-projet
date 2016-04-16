@@ -10,6 +10,7 @@ import model.Map;
 public class Population {
     
     private List<Solution> listSolutions;
+    private Solution bestSolution;
     private int size;
     private Random random;
     
@@ -22,10 +23,12 @@ public class Population {
         for (int i=0; i<size; i++) {
             listSolutions.add(new Solution(map));
         }
+        
+        calculateBestSolution();
     }
 
     public Solution getBestSolution() {
-        return Collections.min(listSolutions);
+        return bestSolution;
     }
 
     public void reproduce(int keptPopulationSize) {
@@ -50,8 +53,13 @@ public class Population {
         for (Solution solution : listSolutions) {
             solution.associateAgencies();
         }
+        calculateBestSolution();
     }
     
+    private void calculateBestSolution() {
+        bestSolution = Collections.min(listSolutions);
+    }
+
     public List<Solution> getListSolutions() {
         return listSolutions;
     }
