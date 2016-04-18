@@ -60,8 +60,8 @@ public class Form extends JPanel {
 
         populationSizeField = new JTextField("100", 5);
         mutationRateField = new JTextField("0.01", 5);
-        keptPopulationSizeField = new JTextField("10", 5);
-        mutatedPopulationSizeField = new JTextField("10", 5);
+        keptPopulationSizeField = new JTextField("50", 5);
+        mutatedPopulationSizeField = new JTextField("20", 5);
 
         startButton = new JButton(startString);
         startButton.addActionListener(new StartController());
@@ -177,7 +177,6 @@ public class Form extends JPanel {
             if (checkAgencies()) {
                 if (geneticAlgorithm.getIsStarted()) {
                     if (checkMutationRate() && checkKeptPopulationSize() && checkMutatedPopulationSize()) {
-                        populationSizeField.setText("" + populationSize);
                         geneticAlgorithm.updateParameters(mutationRate, keptPopulationSize, mutatedPopulationSize);
                     }
                 } else {
@@ -187,6 +186,7 @@ public class Form extends JPanel {
                                 geneticAlgorithm.start(populationSize, mutationRate, keptPopulationSize, mutatedPopulationSize);
                             }
                         });
+                        populationSizeField.setEditable(false);
                         startButton.setText(updateString);
                         stopButton.setEnabled(true);
                     }

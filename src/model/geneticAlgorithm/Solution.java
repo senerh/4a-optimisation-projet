@@ -53,18 +53,22 @@ public class Solution implements Comparable<Solution> {
     }
 
     public void associateAgencies() {
-        solution.clear();
-        List<Agency> listAgencies = new ArrayList<Agency>(map.getListAgencies());
-        while (!listAgencies.isEmpty()) {
-            int index = random.nextInt(listAgencies.size());
-            associateNearestCenter(listAgencies.get(index));
-            listAgencies.remove(index);
-        }
+        boolean isCorrect;
+        do {
+            isCorrect = true;
+            solution.clear();
+            List<Agency> listAgencies = new ArrayList<Agency>(map.getListAgencies());
+            while (!listAgencies.isEmpty()) {
+                int index = random.nextInt(listAgencies.size());
+                isCorrect = associateNearestCenter(listAgencies.get(index)) && isCorrect;
+                listAgencies.remove(index);
+            }
+        } while (!isCorrect);
         removeUselessCenters();
         calculateFitness();
     }
 
-    private void associateNearestCenter(Agency agency) {
+    private boolean associateNearestCenter(Agency agency) {
         Place nearestCenter = null;
         float nearestDistance = Float.MAX_VALUE;
         int index = 0;
@@ -83,6 +87,7 @@ public class Solution implements Comparable<Solution> {
         }
         if (nearestCenter == null) {
             addCenter(agency);
+            return false;
         } else if (solution.containsKey(nearestCenter)) {
             solution.get(nearestCenter).add(agency);
         } else {
@@ -90,6 +95,7 @@ public class Solution implements Comparable<Solution> {
             l.add(agency);
             solution.put(nearestCenter, l);
         }
+        return true;
     }
     
     private void addCenter(Agency agency) {
@@ -185,8 +191,10 @@ public class Solution implements Comparable<Solution> {
     }
     
     public void cross(Solution other) {
-        int index = random.nextInt(Math.min(listPlaces.size(), other.listPlaces.size()));
-        cross(other, index);
+        int start = random.nextInt(listPlaces.size());
+        int end = start + random.nextInt(listPlaces.size() - start);
+        cross(other, start);
+        cross(other, end);
     }
     
     private void cross(Solution other, int index) {
