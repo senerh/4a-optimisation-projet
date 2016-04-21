@@ -24,26 +24,22 @@ public class History {
         listLines.add(new Line(geneticAlgorithm));
     }
 
-    public void save() {
+    public void save() throws IOException {
         String path = System.getProperty("user.dir") + "/"+ FILENAME;
-        try {
-            FileWriter fw = new FileWriter(path);
+        FileWriter fw = new FileWriter(path);
 
-            BufferedWriter output = new BufferedWriter(fw);
-            
-            int populationSize = listLines.get(0).getListFitness().size();
-            int generation = 0;
-            output.write(header(populationSize));
-            for (Line line : listLines) {
-                output.write(lineToString(line, generation));
-                generation++;
-            }
+        BufferedWriter output = new BufferedWriter(fw);
 
-            output.flush();
-            output.close();
-        } catch(IOException e) {
-            e.printStackTrace();
+        int populationSize = listLines.get(0).getListFitness().size();
+        int generation = 0;
+        output.write(header(populationSize));
+        for (Line line : listLines) {
+            output.write(lineToString(line, generation));
+            generation++;
         }
+
+        output.flush();
+        output.close();
     }
     
     private String header(int popultaionSize) {

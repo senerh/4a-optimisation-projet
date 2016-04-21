@@ -3,6 +3,7 @@ package viewController;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -207,6 +208,16 @@ public class Form extends JPanel {
             }
             startButton.setEnabled(false);
             stopButton.setEnabled(false);
+            
+            try {
+                geneticAlgorithm.getHistory().save();
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(
+                        Form.this,
+                        "Vérifiez que vous disposez des droits d'écriture dans le dossier de l'application.",
+                        "Impossible d'enregistrer l'historique.",
+                        JOptionPane.ERROR_MESSAGE);
+            }
         }
         
     }

@@ -44,8 +44,6 @@ public class GeneticAlgorithm extends Observable {
             history.add();
             
             loop();
-            
-            history.save();
         }
     }
     
@@ -127,6 +125,10 @@ public class GeneticAlgorithm extends Observable {
     
     public void stop() {
         isStopped = true;
+    }
+    
+    public History getHistory() {
+        return history;
     }
 
 }
