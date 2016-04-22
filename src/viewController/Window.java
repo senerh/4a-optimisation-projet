@@ -122,8 +122,19 @@ public class Window extends JFrame {
                 }
             }
         });
+        
+        JMenuItem menuAbout = new JMenuItem("À propos");
+        menuAbout.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                JOptionPane.showMessageDialog(Window.this,
+                        "Optimisation Discrète\n\nValentin ANDRÉ\nFranck LACASTAIGNERATTE\nHakan SENER",
+                        "Polytech Lyon Informatique 4A",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
         menuFile.add(menuItemOpen);
+        menuFile.add(menuAbout);
         menuFile.add(menuItemExit);
 
         menuBar.add(menuFile);
