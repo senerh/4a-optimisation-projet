@@ -15,12 +15,20 @@ public class Map extends Observable {
     private List<Place> listPlaces;
     private int nbPersons;
 
+    /**
+     * Represent the HashMap of agencies for a city
+     */
     public Map() {
         listAgencies = new ArrayList<Agency>();
         listPlaces = new ArrayList<Place>();
         nbPersons = 0;
     }
-    
+
+    /**
+     * Fill in the list of agencies with the given file (jeu de test)
+     * @param fileName
+     * @throws IOException
+     */
     public void loadAgencies(String fileName) throws IOException {
         BufferedReader file;
         String line;
@@ -44,7 +52,13 @@ public class Map extends Observable {
         setChanged();
         notifyObservers();
     }
-    
+
+    /**
+     *
+     * @param line
+     * @return an agency with all its attributes
+     * @throws IOException
+     */
     private Agency lineToAgency(String line) throws IOException {
         String[] splitedLine = line.split(";");
         if (splitedLine.length != 6) {
@@ -59,7 +73,12 @@ public class Map extends Observable {
         
         return new Agency(id, name, postalCode, longitude, latitude, nbPersons);
     }
-    
+
+    /**
+     * Fill in the list of cities with the given file (jeu de test)
+     * @param fileName
+     * @throws IOException
+     */
     public void loadPlaces(URL fileName) throws IOException {
         BufferedReader file;
         String line;
@@ -78,7 +97,13 @@ public class Map extends Observable {
         
         file.close();
     }
-    
+
+    /**
+     *
+     * @param line
+     * @return a place (city) with all its attributes
+     * @throws IOException
+     */
     private Place lineToPlace(String line) throws IOException {
         String[] splitedLine = line.split(";");
         if (splitedLine.length != 5) {

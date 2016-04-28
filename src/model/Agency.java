@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Represents an agency
+ */
 public class Agency {
 
     private String id;

@@ -11,6 +11,9 @@ import model.Map;
 import model.Model;
 import model.Place;
 
+/**
+ * represents a solution (boolean list and hashmap)
+ */
 public class Solution implements Comparable<Solution> {
     private Map map;
     private List<Boolean> listPlaces;
@@ -40,7 +43,10 @@ public class Solution implements Comparable<Solution> {
         solution = new HashMap<Place, List<Agency>>();
         generateRandomSolution();
     }
-    
+
+    /**
+     * generate random solution with a minimum number of centers
+     */
     private void generateRandomSolution() {
         int nbPlaces = map.getListPlaces().size();
 
@@ -52,6 +58,10 @@ public class Solution implements Comparable<Solution> {
         associateAgencies();
     }
 
+    /**
+     * Associate all agencies with the nearest center
+     * Agencies are browsed randomly
+     */
     public void associateAgencies() {
         boolean isCorrect;
         do {
@@ -68,6 +78,11 @@ public class Solution implements Comparable<Solution> {
         calculateFitness();
     }
 
+    /**
+     * Associate an agency with the nearest agency
+     * @param agency
+     * @return
+     */
     private boolean associateNearestCenter(Agency agency) {
         Place nearestCenter = null;
         float nearestDistance = Float.MAX_VALUE;
@@ -97,7 +112,11 @@ public class Solution implements Comparable<Solution> {
         }
         return true;
     }
-    
+
+    /**
+     * Correct a solution when there is a lack of agencies
+     * @param agency agency which don't own center
+     */
     private void addCenter(Agency agency) {
         int index = 0;
         float nearestDist = Float.MAX_VALUE;
@@ -125,6 +144,9 @@ public class Solution implements Comparable<Solution> {
         solution.put(nearestPlace, l);
     }
 
+    /**
+     * remove centers which don't own agencies
+     */
     private void removeUselessCenters() {
         int index = 0;
         for (Boolean isCenter : listPlaces) {
@@ -134,7 +156,13 @@ public class Solution implements Comparable<Solution> {
             index++;
         }
     }
-    
+
+    /**
+     * if there is enough available space in a center to put agency
+     * @param center
+     * @param agency
+     * @return
+     */
     private boolean isAvailable(Place center, Agency agency) {
         if (solution.containsKey(center)) {
             List<Agency> l = solution.get(center);
@@ -147,6 +175,14 @@ public class Solution implements Comparable<Solution> {
         return true;
     }
 
+    /**
+     * calculate the distance between two cities
+     * @param lat1
+     * @param lng1
+     * @param lat2
+     * @param lng2
+     * @return
+     */
     private float distFrom(float lat1, float lng1, float lat2, float lng2) {
         double earthRadius = 6371;
         double dLat = Math.toRadians(lat2-lat1);
@@ -163,7 +199,10 @@ public class Solution implements Comparable<Solution> {
     public java.util.Map<Place, List<Agency>> getSolution() {
         return solution;
     }
-    
+
+    /**
+     * calculate the fitness of a solution
+     */
     private void calculateFitness() {
         totalDistance = 0;
         for (Entry<Place, List<Agency>> entry : solution.entrySet()) {
@@ -189,14 +228,23 @@ public class Solution implements Comparable<Solution> {
         
         return new Solution(map, clonedListPlaces, clonedSolution, random, fitness, totalDistance);
     }
-    
+
+    /**
+     * cross between start and end of the solution
+     * @param other
+     */
     public void cross(Solution other) {
         int start = random.nextInt(listPlaces.size());
         int end = start + random.nextInt(listPlaces.size() - start);
         cross(other, start);
         cross(other, end);
     }
-    
+
+    /**
+     * cross between index and end of the solution
+     * @param other
+     * @param index
+     */
     private void cross(Solution other, int index) {
         List<Boolean> l1 = new ArrayList<Boolean>(listPlaces.subList(0, index));
         l1.addAll(other.listPlaces.subList(index, other.listPlaces.size()));
@@ -207,7 +255,11 @@ public class Solution implements Comparable<Solution> {
         listPlaces = l1;
         other.listPlaces = l2;
     }
-    
+
+    /**
+     * mutate a solution with a mutation rate
+     * @param mutationRate
+     */
     public void mutate(float mutationRate) {
         int nbMutations = (int) (listPlaces.size() * mutationRate);
         for (int i=0; i<nbMutations; i++) {

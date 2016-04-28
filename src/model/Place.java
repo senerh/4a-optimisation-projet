@@ -1,5 +1,8 @@
 package model;
 
+/**
+ * Represents a city in France
+ */
 public class Place {
     
     private String id;

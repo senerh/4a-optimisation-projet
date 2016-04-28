@@ -5,6 +5,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Represents a biaised wheel
+ */
 public class Wheel {
     
     private Population population;
@@ -21,7 +24,10 @@ public class Wheel {
         random = new Random();
         calculate();
     }
-    
+
+    /**
+     * generate the biaised wheel
+     */
     private void calculate() {
         Collections.sort(listBestSolutions);
         listBestSolutions = listBestSolutions.subList(0, keptPopulationSize);
@@ -36,7 +42,7 @@ public class Wheel {
             cumulatedProbs.add(cumulatedFitness / totalFitness);
         }
     }
-    
+
     public List<Solution> getNewSolutions() {
         List<Solution> listSolutions = new ArrayList<Solution>();
         for (int i=0; i<population.getSize(); i++) {
@@ -45,7 +51,10 @@ public class Wheel {
         }
         return listSolutions;
     }
-    
+
+    /**
+     * @return the selected solution by the biaised wheel
+     */
     public Solution turn() {
         float probability = random.nextFloat();
         Solution solution = null;

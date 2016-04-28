@@ -5,6 +5,9 @@ import java.util.Observable;
 import model.Map;
 import model.history.History;
 
+/**
+ * Represents an iplementation of an genetic algorithm
+ */
 public class GeneticAlgorithm extends Observable {
     
     private Map map;
@@ -25,7 +28,14 @@ public class GeneticAlgorithm extends Observable {
         this.map = map;
         isStarted = false;
     }
-    
+
+    /**
+     * Start the genetic algorithm
+     * @param size size of the population
+     * @param mutationRate
+     * @param keptPopulationSize
+     * @param mutatedPopulationSize
+     */
     public void start(int size, float mutationRate, int keptPopulationSize, int mutatedPopulationSize) {
         if (!isStarted) {
             isStarted = true;
@@ -46,7 +56,10 @@ public class GeneticAlgorithm extends Observable {
             loop();
         }
     }
-    
+
+    /**
+     * main loop of the genetic algorithm (reproduce, cross, mutate, calculate the fitness)
+     */
     private void loop() {
         int generation = 0;
         System.out.println("generation " + generation + " : " + bestSolution.getFitness());
